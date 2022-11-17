@@ -45,3 +45,6 @@ terraform.rc
 
 !example.tfvars
 
+
+#Others
+run_sysbench_local.sh
