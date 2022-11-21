@@ -19,5 +19,11 @@ output "yugabyte_anywhere_region" {
 }
 
 output "yugabyte_anywhere_ip" {
-  value = var.create_yba_instances ? one(aws_instance.yb_anywhere_instance[*].public_ip) : "non_deployed" 
+  value = var.create_yba_instances ? one(aws_instance.yb_anywhere_instance[*].public_ip) : "non_deployed"
+}
+
+output "replicated_password" {
+  description = "Replicated password to get it please use terraform ouput command "
+  value     = local.replicated_password
+  sensitive = true
 }

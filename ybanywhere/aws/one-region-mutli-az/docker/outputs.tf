@@ -17,3 +17,10 @@ output "yugabyte_anywhere_subnets_az_mapping" {
   value       = local.private_subnet_mapping
   description = "Mapping of subnet to AZ, could be use the configure the provider"
 }
+
+output "replicated_password" {
+  description = "Replicated password to get it please use terraform ouput command "
+  value       = local.replicated_password
+  sensitive   = true
+}
+

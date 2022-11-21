@@ -17,5 +17,6 @@ This folder dedployment everything related to [Yugabyte Anywhere](https://www.yu
 # Folders structures
 
 * [`one-region-multi-az`](./one-region-mutli-az/docker/README.md) Multi-AZ deployment
+* [`multi-region-multi-az`](./multi-region-mutli-az/docker/README.md) Multi-Region deployment, including VPC Peering between the 3 regions.
 
 

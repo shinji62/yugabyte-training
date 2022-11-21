@@ -42,6 +42,7 @@ resource "aws_instance" "yb_anywhere_instance" {
       replicated_conf      = base64encode(file("${path.module}/files/replicated.conf"))
       license_bucket       = aws_s3_bucket.license_bucket.id
       application_settings = base64encode(file("${path.module}/files/application_settings.conf"))
+      replicated_password  = local.replicated_password
     }
   ))
 

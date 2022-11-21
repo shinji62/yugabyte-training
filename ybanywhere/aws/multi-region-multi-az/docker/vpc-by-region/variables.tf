@@ -64,3 +64,9 @@ variable "license_path" {
   type        = string
   nullable = true
 }
+
+variable "replicated_password" {
+  description = "Password for replicated daemon, if not specified will be generated."
+  type        = string
+  default     = null
+}

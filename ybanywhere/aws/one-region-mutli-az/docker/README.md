@@ -32,6 +32,20 @@ terraform plan -var-file=yourvars-file.tfvars -out on-region.tfplan
 terraform apply on-region.tfplan
 ```
 
+
+# YBA anywhere 
+You can now access to YBA by using the `yugabyte_anywhere_public_ip` output by your terraform.
+
+Please use the Terraform output to configure the AWS Cloud provider, please use "Service account of the instance" you don't need any additional service account.
+
+# Replicated password
+To output the password of replicated please use the following command
+
+```
+shell
+terraform output -json replicated_password
+```
+
 # Cleaning
 Please delete from YBA interface
 1. Universes

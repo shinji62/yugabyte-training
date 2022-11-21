@@ -27,7 +27,10 @@ runcmd:
   - |
      # Get public IP
      export PUBLIC_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
-     sudo cat /tmp/settings.conf | jq ".hostname.value=env.PUBLIC_IP" | sudo tee /tmp/settings.conf
+     cat /tmp/settings.conf | jq ".hostname.value=env.PUBLIC_IP" | sudo tee /tmp/settings.conf
+  - |
+     # Change password for replicated
+     cat /etc/replicated.conf | jq '.DaemonAuthenticationPassword="${replicated_password}"' | sudo tee /etc/replicated.conf
   - |
     mkdir /tmp/ssm && cd /tmp/ssm
     wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb

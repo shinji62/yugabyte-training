@@ -1,9 +1,31 @@
-variable "aws_region" {
+variable "gcp_region_1" {
   type        = string
-  default     = "ap-northeast-1"
-  description = "AWS region, 3 AZ will be created from the region (default: ap-northeast-1)"
+  default     = "asia-northeast1"
+  description = "GCP region (default: asia-northeast1)"
 }
 
+variable "gcp_region_2" {
+  type        = string
+  default     = "asia-northeast2"
+  description = "GCP region (default: asia-northeast2)"
+}
+
+variable "gcp_region_3" {
+  type        = string
+  default     = "asia-northeast3"
+  description = "GCP region (default: asia-northeast3)"
+}
+
+variable "project_id" {
+  type        = string
+  description = "GCP project id"
+}
+
+variable "vm_image" {
+  type    = string
+  default = "ubuntu-2004-focal-v20221018"
+
+}
 variable "default_tags" {
   type        = map(any)
   description = "List of tags to be applied to every resources (Required)"
@@ -15,9 +37,9 @@ variable "resource_prefix" {
 }
 
 variable "instance_type" {
-  description = "Instance type for the YugabyteDB Anywhere node (default: c5.xlarge)"
+  description = "Instance type for the YugabyteDB Anywhere node (default: n1-standard-4)"
   type        = string
-  default     = "c5.xlarge"
+  default     = "n1-standard-4"
 }
 
 variable "volume_size" {
@@ -38,6 +60,11 @@ variable "allowed_sources" {
 
 variable "license_path" {
   description = "Local path to the license ril file"
+  type        = string
+}
+
+variable "public_key_path" {
+  description = "Local path to you public key to connect to YBA instance"
   type        = string
 }
 
