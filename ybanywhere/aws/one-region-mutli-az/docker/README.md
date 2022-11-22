@@ -83,6 +83,8 @@ terraform destroy -var-file=yourvars-file.tfvars
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | List of tags to be applied to every resources (Required) | `map(any)` | n/a | yes |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | Instance type for the YugabyteDB Anywhere node (default: c5.xlarge) | `string` | `"c5.xlarge"` | no |
 | <a name="input_license_path"></a> [license\_path](#input\_license\_path) | Local path to the license ril file | `string` | n/a | yes |
+| <a name="input_replicated_password"></a> [replicated\_password](#input\_replicated\_password) | Password for replicated daemon, if not specified will be generated. | `string` | `null` | no |
+| <a name="input_replicated_seq_number"></a> [replicated\_seq\_number](#input\_replicated\_seq\_number) | Specific replicated version to pin to. | `number` | `null` | no |
 | <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | Prefix to be used for every created resources, Please use 3-4 char. (Required) | `string` | n/a | yes |
 | <a name="input_ssh_keypair_name"></a> [ssh\_keypair\_name](#input\_ssh\_keypair\_name) | AWS key pair name (Required) | `string` | n/a | yes |
 | <a name="input_volume_size"></a> [volume\_size](#input\_volume\_size) | Volume size for YugabyteDB Anywhere node (default: 100) | `string` | `"100"` | no |
@@ -91,6 +93,7 @@ terraform destroy -var-file=yourvars-file.tfvars
 
 | Name | Description |
 |------|-------------|
+| <a name="output_replicated_password"></a> [replicated\_password](#output\_replicated\_password) | Replicated password to get it please use terraform output command |
 | <a name="output_yugabyte_anywhere_public_ip"></a> [yugabyte\_anywhere\_public\_ip](#output\_yugabyte\_anywhere\_public\_ip) | Public IP of your Yugabyte anywhere |
 | <a name="output_yugabyte_anywhere_security_group_id"></a> [yugabyte\_anywhere\_security\_group\_id](#output\_yugabyte\_anywhere\_security\_group\_id) | Id of the Security Group where Yugabyte Anywhere is installed, could be use the configure the provider |
 | <a name="output_yugabyte_anywhere_subnets_az_mapping"></a> [yugabyte\_anywhere\_subnets\_az\_mapping](#output\_yugabyte\_anywhere\_subnets\_az\_mapping) | Mapping of subnet to AZ, could be use the configure the provider |

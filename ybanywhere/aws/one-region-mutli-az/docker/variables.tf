@@ -46,3 +46,9 @@ variable "replicated_password" {
   type        = string
   default     = null
 }
+
+variable "replicated_seq_number" {
+  description = "Specific replicated version to pin to."
+  type        = number
+  default     = null
+}

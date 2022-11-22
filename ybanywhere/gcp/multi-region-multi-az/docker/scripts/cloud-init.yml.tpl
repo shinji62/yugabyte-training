@@ -37,7 +37,10 @@ runcmd:
      cat /tmp/settings.conf | jq ".hostname.value=env.PUBLIC_IP" | sudo tee /tmp/settings.conf
   - |
      # Change password for replicated
-     cat /etc/replicated.conf | jq '.DaemonAuthenticationPassword="${replicated_password}"' | sudo tee /etc/replicated.conf
+     cat /etc/replicated.conf | jq '.DaemonAuthenticationPassword="${replicated_password}"' | sudo tee /etc/replicated.conf > /dev/null
+%{ if replicated_seq_number != null ~}
+     cat /etc/replicated.conf | jq '.ReleaseSequence=${replicated_seq_number}' | sudo tee /etc/replicated.conf  > /dev/null
+%{ endif ~}
   - |
     # Get License from s3
     gsutil cp gs://${license_bucket}/license.rli /tmp/license.rli

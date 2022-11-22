@@ -57,6 +57,7 @@ terraform destroy -var-file=yourvars-file.tfvars
 |------|---------|
 | <a name="requirement_google"></a> [google](#requirement\_google) | 4.43.1 |
 
+
 ## Providers
 
 | Name | Version |
@@ -101,6 +102,7 @@ terraform destroy -var-file=yourvars-file.tfvars
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | GCP project id | `string` | n/a | yes |
 | <a name="input_public_key_path"></a> [public\_key\_path](#input\_public\_key\_path) | Local path to you public key to connect to YBA instance | `string` | n/a | yes |
 | <a name="input_replicated_password"></a> [replicated\_password](#input\_replicated\_password) | Password for replicated daemon, if not specified will be generated. | `string` | `null` | no |
+| <a name="input_replicated_seq_number"></a> [replicated\_seq\_number](#input\_replicated\_seq\_number) | Specific replicated version to pin to. | `number` | `null` | no |
 | <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | Prefix to be used for every created resources, Please use 3-4 char. (Required) | `string` | n/a | yes |
 | <a name="input_ssh_keypair_name"></a> [ssh\_keypair\_name](#input\_ssh\_keypair\_name) | AWS key pair name (Required) | `string` | n/a | yes |
 | <a name="input_vm_image"></a> [vm\_image](#input\_vm\_image) | n/a | `string` | `"ubuntu-2004-focal-v20221018"` | no |

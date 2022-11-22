@@ -33,11 +33,12 @@ resource "google_compute_instance" "yugabyte_anywhere_instances" {
     user-data = templatefile(
       "${path.module}/scripts/cloud-init.yml.tpl",
       {
-        replicated_conf      = base64encode(file("${path.module}/files/replicated.conf"))
-        license_bucket       = google_storage_bucket.license_bucket.name
-        application_settings = base64encode(file("${path.module}/files/application_settings.conf"))
-        public_key           = file(var.public_key_path)
-        replicated_password  = local.replicated_password
+        replicated_conf       = base64encode(file("${path.module}/files/replicated.conf"))
+        license_bucket        = google_storage_bucket.license_bucket.name
+        application_settings  = base64encode(file("${path.module}/files/application_settings.conf"))
+        public_key            = file(var.public_key_path)
+        replicated_password   = local.replicated_password
+        replicated_seq_number = var.replicated_seq_number
       }
     )
   }

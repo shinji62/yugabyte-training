@@ -81,6 +81,17 @@ terraform destroy -var-file=yourvars-file.tfvars
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 4.39.0 |
 
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_r1"></a> [r1](#module\_r1) | ./vpc-by-region | n/a |
+| <a name="module_r2"></a> [r2](#module\_r2) | ./vpc-by-region | n/a |
+| <a name="module_r3"></a> [r3](#module\_r3) | ./vpc-by-region | n/a |
+| <a name="module_vpc-peering-r1-r2"></a> [vpc-peering-r1-r2](#module\_vpc-peering-r1-r2) | grem11n/vpc-peering/aws | 5.0.0 |
+| <a name="module_vpc-peering-r1-r3"></a> [vpc-peering-r1-r3](#module\_vpc-peering-r1-r3) | grem11n/vpc-peering/aws | 5.0.0 |
+| <a name="module_vpc-peering-r2-r3"></a> [vpc-peering-r2-r3](#module\_vpc-peering-r2-r3) | grem11n/vpc-peering/aws | 5.0.0 |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -92,6 +103,15 @@ terraform destroy -var-file=yourvars-file.tfvars
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | List of tags to be applied to every resources (Required) | `map(any)` | n/a | yes |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | Instance type for the YugabyteDB Anywhere node (default: c5.xlarge) | `string` | `"c5.xlarge"` | no |
 | <a name="input_license_path"></a> [license\_path](#input\_license\_path) | Local path to the license ril file | `string` | n/a | yes |
+| <a name="input_replicated_password"></a> [replicated\_password](#input\_replicated\_password) | Password for replicated daemon, if not specified will be generated. | `string` | `null` | no |
+| <a name="input_replicated_seq_number"></a> [replicated\_seq\_number](#input\_replicated\_seq\_number) | Specific replicated version to pin to. | `number` | `null` | no |
 | <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | Prefix to be used for every created resources, Please use 3-4 char. (Required) | `string` | n/a | yes |
 | <a name="input_ssh_keypair_name"></a> [ssh\_keypair\_name](#input\_ssh\_keypair\_name) | AWS key pair name (Required) | `string` | n/a | yes |
 | <a name="input_volume_size"></a> [volume\_size](#input\_volume\_size) | Volume size for YugabyteDB Anywhere node (default: 100) | `string` | `"100"` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_region_output"></a> [region\_output](#output\_region\_output) | Region |
+| <a name="output_replicated_password"></a> [replicated\_password](#output\_replicated\_password) | n/a |

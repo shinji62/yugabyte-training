@@ -27,10 +27,13 @@ runcmd:
   - |
      # Get public IP
      export PUBLIC_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
-     cat /tmp/settings.conf | jq ".hostname.value=env.PUBLIC_IP" | sudo tee /tmp/settings.conf
+     cat /tmp/settings.conf | jq ".hostname.value=env.PUBLIC_IP" | sudo tee /tmp/settings.conf > /dev/null
   - |
      # Change password for replicated
-     cat /etc/replicated.conf | jq '.DaemonAuthenticationPassword="${replicated_password}"' | sudo tee /etc/replicated.conf
+     cat /etc/replicated.conf | jq '.DaemonAuthenticationPassword="${replicated_password}"' | sudo tee /etc/replicated.conf > /dev/null
+%{ if replicated_seq_number != null ~}
+     cat /etc/replicated.conf | jq '.ReleaseSequence=${replicated_seq_number}' | sudo tee /etc/replicated.conf  > /dev/null
+%{ endif ~}
   - |
     mkdir /tmp/ssm && cd /tmp/ssm
     wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb

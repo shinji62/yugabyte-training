@@ -11,9 +11,11 @@ module "r1" {
   public_subnet_cidr  = ["10.1.3.0/24", "10.1.4.0/24", "10.1.5.0/24"]
   allowed_sources     = concat(["10.0.0.0/8"], var.allowed_sources)
 
-  create_yba_instances = true
-  ssh_keypair_name     = var.ssh_keypair_name
-  license_path         = var.license_path
+  create_yba_instances  = true
+  ssh_keypair_name      = var.ssh_keypair_name
+  license_path          = var.license_path
+  replicated_password   = var.replicated_password
+  replicated_seq_number = var.replicated_seq_number
 }
 
 module "r2" {

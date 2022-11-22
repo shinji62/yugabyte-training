@@ -39,10 +39,11 @@ resource "aws_instance" "yb_anywhere_instance" {
   user_data_base64 = base64encode(templatefile(
     "${path.module}/scripts/cloud-init.yml.tpl",
     {
-      replicated_conf      = base64encode(file("${path.module}/files/replicated.conf"))
-      license_bucket       = aws_s3_bucket.license_bucket.id
-      application_settings = base64encode(file("${path.module}/files/application_settings.conf"))
-      replicated_password  = local.replicated_password
+      replicated_conf       = base64encode(file("${path.module}/files/replicated.conf"))
+      license_bucket        = aws_s3_bucket.license_bucket.id
+      application_settings  = base64encode(file("${path.module}/files/application_settings.conf"))
+      replicated_password   = local.replicated_password
+      replicated_seq_number = var.replicated_seq_number
     }
   ))
 
