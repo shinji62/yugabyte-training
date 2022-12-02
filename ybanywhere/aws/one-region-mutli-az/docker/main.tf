@@ -1,36 +1,20 @@
-// Locals and other required data
-locals {
-  name_prefix      = var.resource_prefix
-  region           = var.aws_region
-  yb_anywhere_port = [22, 80, 8800, 9090]
-  yb_ports         = [22, 5433, 6379, 7000, 7100, 9000, 9100, 9300, 9042, 11000, 14000, 18018, 54422]
-  allowed_sources  = concat(var.allowed_sources, [module.vpc.vpc_cidr_block])
+// Create VPC with 3 AZ 
+// 3 Private/Public subnet and one NAT gw by AZ
 
-  private_subnet_mapping = { for k, az in(module.vpc.azs) : az => {
-    private_subnet = module.vpc.private_subnets[k]
-    public_subnet  = module.vpc.public_subnets[k]
-    }
-  }
-  replicated_password = (var.replicated_password != null ? var.replicated_password : random_password.replicated_password.result)
+module "r1" {
+  source              = "../../multi-region-multi-az/docker/vpc-by-region"
+  aws_region          = var.aws_region
+  default_tags        = var.default_tags
+  resource_prefix     = var.resource_prefix
+  vpc_cidr_block      = "10.1.0.0/16"
+  private_subnet_cidr = ["10.1.0.0/24", "10.1.1.0/24", "10.1.2.0/24"]
+  public_subnet_cidr  = ["10.1.3.0/24", "10.1.4.0/24", "10.1.5.0/24"]
+  allowed_sources     = concat(["10.0.0.0/8"], var.allowed_sources)
+
+  create_yba_instances  = true
+  ssh_keypair_name      = var.ssh_keypair_name
+  license_path          = var.license_path
+  replicated_password   = var.replicated_password
+  replicated_seq_number = var.replicated_seq_number
+  node_on_prem_test     = var.node_on_prem_test
 }
-
-resource "random_password" "replicated_password" {
-  length      = 16
-  special     = false
-  min_lower   = 5
-  min_numeric = 3
-  min_upper   = 3
-}
-
-
-//Getting AZ for the regios
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
-
-
-//Copy license file to the bucket 
-
-
-

@@ -10,5 +10,5 @@ terraform {
 provider "google" {
   # Configuration options
   project = var.project_id
-  region  = var.gcp_region_1
+  region  = var.gcp_regions[0]
 }

@@ -12,6 +12,7 @@ locals {
     }
   }
   replicated_password = (var.replicated_password != null ? var.replicated_password : random_password.replicated_password.result)
+  node_ssh_key        = (var.node_on_prem_public_key_path != null ? var.node_on_prem_public_key_path : "")
 }
 
 resource "random_password" "replicated_password" {

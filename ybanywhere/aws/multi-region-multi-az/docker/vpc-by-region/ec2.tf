@@ -67,3 +67,54 @@ resource "aws_instance" "yb_anywhere_instance" {
 
 }
 
+
+//If we want to test on prem node
+resource "aws_instance" "yb_anywhere_node_on_prem" {
+
+  ami   = data.aws_ami.yb_ami.id
+  count = var.node_on_prem_test
+
+  associate_public_ip_address = true
+  instance_type               = var.instance_type
+  key_name                    = var.ssh_keypair_name
+  vpc_security_group_ids      = [aws_security_group.yb_anywhere_sg.id, aws_security_group.yb_sg.id]
+  iam_instance_profile        = one(aws_iam_instance_profile.yb_node_inst_profile[*].name)
+  subnet_id                   = module.vpc.public_subnets[index(module.vpc.azs, element(module.vpc.azs, count.index))]
+
+  user_data_base64 = base64encode(templatefile(
+    "${path.module}/scripts/cloud-init-node.yml.tpl",
+    {
+      public_key_node = file(local.node_ssh_key)
+    }
+  ))
+
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_put_response_hop_limit = 3
+  }
+
+  root_block_device {
+    volume_size = var.volume_size
+    encrypted   = true
+    volume_type = "gp3"
+  }
+
+  tags = {
+    Name = "${local.name_prefix}-yb_anywhere-${count.index}"
+  }
+
+}
+
+resource "aws_volume_attachment" "yb_anywhere_node_attachement" {
+  count       = var.node_on_prem_test
+  device_name = "/dev/sdh"
+  volume_id   = element(aws_ebs_volume.yb_anywhere_node_disk.*.id, count.index)
+  instance_id = element(aws_instance.yb_anywhere_node_on_prem.*.id, count.index)
+}
+
+resource "aws_ebs_volume" "yb_anywhere_node_disk" {
+  count             = var.node_on_prem_test
+  availability_zone = element(module.vpc.azs, count.index)
+  type              = "gp3"
+  size              = 100
+}

@@ -1,16 +1,16 @@
 variable "aws_region_1" {
-    type = string
-    description = "First AWS Region"
+  type        = string
+  description = "First AWS Region"
 }
 
 variable "aws_region_2" {
-    type = string
-    description = "Second AWS Region"
+  type        = string
+  description = "Second AWS Region"
 }
 
 variable "aws_region_3" {
-    type = string
-    description = "Third AWS Region"
+  type        = string
+  description = "Third AWS Region"
 }
 
 variable "default_tags" {
@@ -44,13 +44,13 @@ variable "volume_size" {
 variable "ssh_keypair_name" {
   description = "AWS key pair name (Required)"
   type        = string
-  nullable = true
+  nullable    = true
 }
 
 variable "license_path" {
   description = "Local path to the license ril file"
   type        = string
-  nullable = true
+  nullable    = true
 }
 
 variable "replicated_password" {
@@ -62,5 +62,17 @@ variable "replicated_password" {
 variable "replicated_seq_number" {
   description = "Specific replicated version to pin to."
   type        = number
+  default     = null
+}
+
+variable "node_on_prem_test" {
+  description = "Will create 3 nodes to test on_prem accross az"
+  type        = number
+  default     = null
+}
+
+variable "node_on_prem_public_key_path" {
+  description = "Local path to you public key to connect to YB Node instance (Default: empty)"
+  type        = string
   default     = null
 }

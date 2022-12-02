@@ -5,8 +5,8 @@ variable "aws_region" {
 }
 
 variable "create_yba_instances" {
-  type = bool
-  default =false
+  type        = bool
+  default     = false
   description = "When true, will deploy the yba anywhere on this VPC with public IP."
 }
 
@@ -56,13 +56,13 @@ variable "volume_size" {
 variable "ssh_keypair_name" {
   description = "AWS key pair name (Required)"
   type        = string
-  nullable = true
+  nullable    = true
 }
 
 variable "license_path" {
   description = "Local path to the license ril file"
   type        = string
-  nullable = true
+  nullable    = true
 }
 
 variable "replicated_password" {
@@ -75,4 +75,38 @@ variable "replicated_seq_number" {
   description = "Specific replicated version to pin to."
   type        = number
   default     = null
+}
+
+variable "node_on_prem_test" {
+  description = "Will create X nodes to test on_prem accross az (Default: 0)"
+  default     = 0
+  type        = number
+}
+
+
+variable "node_on_prem_public_key_path" {
+  description = "Local path to you public key to connect to YB Node instance (Default: empty)"
+  type        = string
+  default     = null
+}
+
+
+// Variable passed over for VPN setup 
+
+variable "enable_vpn_gateway" {
+  description = "Should be true if you want to create a new VPN Gateway resource and attach it to the VPC"
+  type        = bool
+  default     = false
+}
+
+variable "propagate_private_route_tables_vgw" {
+  description = "Should be true if you want route table propagation"
+  type        = bool
+  default     = false
+}
+
+variable "propagate_public_route_tables_vgw" {
+  description = "Should be true if you want route table propagation"
+  type        = bool
+  default     = false
 }

@@ -5,6 +5,8 @@ locals {
   # 35.235.240.0/20 is Cloud IAP
   allowed_sources     = concat(var.allowed_sources, module.gcp-vpc.subnets_ips, ["35.235.240.0/20"])
   replicated_password = (var.replicated_password != null ? var.replicated_password : random_password.replicated_password.result)
+  gcp-az              = ["a", "b", "c"]
+  node_ssh_key        = (var.node_on_prem_public_key_path != null ? var.node_on_prem_public_key_path : var.public_key_path)
 }
 
 resource "random_password" "replicated_password" {

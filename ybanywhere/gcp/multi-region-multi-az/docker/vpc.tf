@@ -5,21 +5,12 @@ module "gcp-vpc" {
   network_name = local.name_prefix
   mtu          = 1460
 
-  subnets = [
+  subnets = [for k, v in var.gcp_regions :
     {
-      subnet_name   = "${local.name_prefix}-${var.gcp_region_1}-subnet"
-      subnet_ip     = "10.1.0.0/16"
-      subnet_region = var.gcp_region_1
-    },
-    {
-      subnet_name   = "${local.name_prefix}-${var.gcp_region_2}-subnet"
-      subnet_ip     = "10.2.0.0/16"
-      subnet_region = var.gcp_region_2
-    },
-    {
-      subnet_name   = "${local.name_prefix}-${var.gcp_region_3}-subnet"
-      subnet_ip     = "10.3.0.0/16"
-      subnet_region = var.gcp_region_3
+      subnet_name   = "${local.name_prefix}-${v}-subnet"
+      subnet_ip     = "10.${k + 1}.0.0/16"
+      subnet_region = v
+
     }
   ]
 }

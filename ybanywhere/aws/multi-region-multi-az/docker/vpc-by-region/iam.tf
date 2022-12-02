@@ -1,6 +1,5 @@
 
 data "aws_iam_policy_document" "assume_role_policy" {
-  count = var.create_yba_instances ? 1 : 0
   statement {
     actions = ["sts:AssumeRole"]
 
@@ -12,7 +11,6 @@ data "aws_iam_policy_document" "assume_role_policy" {
 }
 
 data "aws_iam_policy_document" "yb_anywhere_policy_doc" {
-  count = var.create_yba_instances ? 1 : 0
   statement {
     actions = [
       "ec2:AttachVolume",
@@ -96,46 +94,70 @@ data "aws_iam_policy_document" "license_backup_policy" {
 
 
 resource "aws_iam_policy" "yb_any_license_s3_policy" {
-  count = var.create_yba_instances ? 1 : 0
+  count  = var.create_yba_instances ? 1 : 0
   name   = "${local.name_prefix}-ybw-inst-s3-policy"
   policy = one(data.aws_iam_policy_document.license_backup_policy[*].json)
 }
 
 resource "aws_iam_policy" "yb_anywhere_policy" {
-  count = var.create_yba_instances ? 1 : 0
+  count  = var.create_yba_instances ? 1 : 0
   name   = "${local.name_prefix}-ybw-inst-policy"
-  policy = one(data.aws_iam_policy_document.yb_anywhere_policy_doc[*].json)
+  policy = data.aws_iam_policy_document.yb_anywhere_policy_doc.json
 }
 
 # Yugabyte Anywhere instance Role
 resource "aws_iam_role" "yb_anywhere_role" {
-  count = var.create_yba_instances ? 1 : 0
+  count              = var.create_yba_instances ? 1 : 0
   name               = "${local.name_prefix}-ybw-role"
   path               = "/"
   description        = "YB anywhere instance policy EC2 Role"
-  assume_role_policy = one(data.aws_iam_policy_document.assume_role_policy[*].json)
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
 resource "aws_iam_instance_profile" "yb_any_inst_profile" {
   count = var.create_yba_instances ? 1 : 0
-  name = "${local.name_prefix}-ybw-inst-profile"
-  role = one(aws_iam_role.yb_anywhere_role[*].name)
+  name  = "${local.name_prefix}-ybw-inst-profile"
+  role  = one(aws_iam_role.yb_anywhere_role[*].name)
 }
 
 resource "aws_iam_role_policy_attachment" "yb-anywhere-ssm-attach" {
-  count = var.create_yba_instances ? 1 : 0
+  count      = var.create_yba_instances ? 1 : 0
   role       = one(aws_iam_role.yb_anywhere_role[*].name)
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_role_policy_attachment" "yb-anywhere-policy-attach" {
-  count = var.create_yba_instances ? 1 : 0
+  count      = var.create_yba_instances ? 1 : 0
   role       = one(aws_iam_role.yb_anywhere_role[*].name)
   policy_arn = one(aws_iam_policy.yb_anywhere_policy[*].arn)
 }
 
 resource "aws_iam_role_policy_attachment" "yb-anywhere-s3-attach" {
-  count = var.create_yba_instances ? 1 : 0
+  count      = var.create_yba_instances ? 1 : 0
   role       = one(aws_iam_role.yb_anywhere_role[*].name)
   policy_arn = one(aws_iam_policy.yb_any_license_s3_policy[*].arn)
+}
+
+
+### Role for the nodes in case of on-prem testing 
+
+
+resource "aws_iam_role" "yb_node_role" {
+  count              = (var.node_on_prem_test != 0 ? 1 : 0)
+  name               = "${local.name_prefix}-yb-node-role"
+  path               = "/"
+  description        = "YB node instance policy EC2 Role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
+}
+
+resource "aws_iam_instance_profile" "yb_node_inst_profile" {
+  count = (var.node_on_prem_test != 0 ? 1 : 0)
+  name  = "${local.name_prefix}-ybw-node-profile"
+  role  = one(aws_iam_role.yb_node_role[*].name)
+}
+
+resource "aws_iam_role_policy_attachment" "yb-node-ssm-attach" {
+  count      = (var.node_on_prem_test != 0 ? 1 : 0)
+  role       = one(aws_iam_role.yb_node_role[*].name)
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }

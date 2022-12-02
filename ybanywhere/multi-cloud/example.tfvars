@@ -1,0 +1,23 @@
+aws_region = "ap-northeast-1"
+gcp_region = "asia-northeast1"
+project_id = "yuga-rjw"
+default_tags = {
+  yb_tag1 = "gwenn"
+  yb_tag2 = "test"
+}
+//replicated_seq_number = 1028
+allowed_sources              = ["YOUR_IP/32"]
+aws_create_yba_instances     = true
+aws_node_on_prem_test        = 2
+aws_ssh_keypair_name         = "my-key-name-in-aws"
+azure_create_yba_instances   = false
+azure_node_on_prem_test      = 2
+azure_resource_group         = "my-azure-resource-group-name"
+gcp_create_yba_instances     = false
+gcp_node_on_prem_test        = 2
+license_path                 = "license-path-yba"
+node_on_prem_public_key_path = "path-my-public-key-for-yba-on-prem-cloud-provider"
+replicated_password          = "mypassword"
+resource_prefix              = "ye-rp-"
+subscription_id              = "my-azure-susb-id"
+tenant_id                    = "my-azure-tenant-id"

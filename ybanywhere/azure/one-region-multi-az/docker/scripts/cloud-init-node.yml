@@ -1,0 +1,29 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+ssh_deletekeys: false
+
+packages:
+  - curl
+  - wget
+  - jq
+  - python
+
+bootcmd:
+  - while [ ! -b /dev/sdc ]; do echo "waiting for device /dev/sdc"; sleep 5 ; done
+  - parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
+  - mkfs -t xfs /dev/sdc1
+  - partprobe /dev/sdc1
+  - mkdir -p /mnt/data
+
+mounts:
+  - ["/dev/sdc1", "/mnt/data", "xfs", "defaults,nofail,noatime"]
+
+runcmd:
+  - |
+    mkdir -p /mnt/data || true
+    mount /dev/sdc1 /mnt/data || true
+  - |
+    # Install Azure CLI
+    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash

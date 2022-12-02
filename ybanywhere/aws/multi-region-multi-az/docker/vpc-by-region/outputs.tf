@@ -24,6 +24,22 @@ output "yugabyte_anywhere_ip" {
 
 output "replicated_password" {
   description = "Replicated password to get it please use terraform ouput command "
-  value     = local.replicated_password
-  sensitive = true
+  value       = local.replicated_password
+  sensitive   = true
+}
+
+
+output "node_on_prem" {
+  value = { for v in aws_instance.yb_anywhere_node_on_prem :
+    v.tags_all["Name"] => {
+      "az"         = v.availability_zone
+      "public_ip"  = v.public_ip
+      "private_ip" = v.private_ip
+    }
+  }
+}
+
+output "vpn_gateway_id" {
+  value       = module.vpc.vgw_id
+  description = "Vpn Gateway ID"
 }

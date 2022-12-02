@@ -1,7 +1,7 @@
 variable "aws_region" {
   type        = string
   default     = "ap-northeast-1"
-  description = "AWS region, 3 AZ will be created from the region (default: ap-northeast-1)"
+  description = " AWS Region (Default: ap-northeast-1)"
 }
 
 variable "default_tags" {
@@ -12,6 +12,11 @@ variable "default_tags" {
 variable "resource_prefix" {
   type        = string
   description = "Prefix to be used for every created resources, Please use 3-4 char. (Required)"
+}
+
+variable "allowed_sources" {
+  description = "Source ips to restrict traffic, for example [\"YOUR_IP/32\"] (Required)"
+  type        = list(string)
 }
 
 variable "instance_type" {
@@ -29,16 +34,13 @@ variable "volume_size" {
 variable "ssh_keypair_name" {
   description = "AWS key pair name (Required)"
   type        = string
-}
-
-variable "allowed_sources" {
-  description = "Source ips to restrict traffic, for example [\"YOUR_IP/32\"] (Required)"
-  type        = list(string)
+  nullable    = true
 }
 
 variable "license_path" {
   description = "Local path to the license ril file"
   type        = string
+  nullable    = true
 }
 
 variable "replicated_password" {
@@ -51,4 +53,10 @@ variable "replicated_seq_number" {
   description = "Specific replicated version to pin to."
   type        = number
   default     = null
+}
+
+variable "node_on_prem_test" {
+  description = "Will create 3 nodes to test on_prem accross az"
+  default     = false
+  type        = bool
 }
