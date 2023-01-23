@@ -56,7 +56,7 @@ variable "replicated_seq_number" {
 }
 
 variable "node_on_prem_test" {
-  description = "Will create 3 nodes to test on_prem accross az"
-  default     = false
-  type        = bool
+  description = "Will create X nodes to test on_prem accross az (Default: 0)"
+  default     = 0
+  type        = number
 }
