@@ -22,13 +22,6 @@ output "yugabyte_anywhere_ip" {
   value = var.create_yba_instances ? one(aws_instance.yb_anywhere_instance[*].public_ip) : "non_deployed"
 }
 
-output "replicated_password" {
-  description = "Replicated password to get it please use terraform ouput command "
-  value       = local.replicated_password
-  sensitive   = true
-}
-
-
 output "node_on_prem" {
   value = { for v in aws_instance.yb_anywhere_node_on_prem :
     v.tags_all["Name"] => {
@@ -42,4 +35,19 @@ output "node_on_prem" {
 output "vpn_gateway_id" {
   value       = module.vpc.vgw_id
   description = "Vpn Gateway ID"
+}
+
+output "azs" {
+  value       = module.vpc.azs
+  description = "AZ"
+}
+
+output "vpc_id" {
+  value       = module.vpc.vpc_id
+  description = "vpc id"
+}
+
+output "private_subnets" {
+  value       = module.vpc.private_subnets
+  description = "private subnet"
 }

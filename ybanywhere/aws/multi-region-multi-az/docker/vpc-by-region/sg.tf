@@ -24,9 +24,10 @@ resource "aws_security_group" "yb_anywhere_sg" {
 
   #tfsec:ignore:aws-ec2-add-description-to-security-group-rule
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    #tfsec:ignore:aws-ec2-no-public-egress-sgr
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
@@ -61,8 +62,10 @@ resource "aws_security_group" "yb_sg" {
   }
   #tfsec:ignore:aws-ec2-add-description-to-security-group-rule
   egress {
-    from_port        = 0
-    to_port          = 0
+    from_port = 0
+    to_port   = 0
+    #tfsec:ignore:aws-ec2-no-public-egress-sgr
+    #tfsec:ignore:aws-ec2-no-public-egress-sgr
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
