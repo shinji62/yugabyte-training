@@ -11,11 +11,9 @@ module "r1" {
   public_subnet_cidr  = ["10.1.3.0/24", "10.1.4.0/24", "10.1.5.0/24"]
   allowed_sources     = concat(["10.0.0.0/8"], var.allowed_sources)
 
-  create_yba_instances         = true
+  create_yba_instances         = false
   ssh_keypair_name             = var.ssh_keypair_name
   license_path                 = var.license_path
-  replicated_password          = var.replicated_password
-  replicated_seq_number        = var.replicated_seq_number
   node_on_prem_test            = var.node_on_prem_test
   node_on_prem_public_key_path = var.node_on_prem_public_key_path
 }
@@ -33,6 +31,7 @@ module "r2" {
   license_path                 = null
   node_on_prem_public_key_path = var.node_on_prem_public_key_path
 }
+
 module "r3" {
   source                       = "./vpc-by-region"
   aws_region                   = var.aws_region_3
@@ -47,8 +46,6 @@ module "r3" {
   node_on_prem_public_key_path = var.node_on_prem_public_key_path
 }
 
-
-# Peering
 
 #Peering r1-r2
 module "vpc-peering-r1-r2" {
@@ -68,6 +65,7 @@ module "vpc-peering-r1-r2" {
   tags = {
     Name = "${var.resource_prefix}-${var.aws_region_1}-${var.aws_region_2}-peering"
   }
+  depends_on = [module.r1, module.r2]
 }
 
 
@@ -88,6 +86,7 @@ module "vpc-peering-r1-r3" {
   tags = {
     Name = "${var.resource_prefix}-${var.aws_region_1}-${var.aws_region_3}-peering"
   }
+  depends_on = [module.r1, module.r3]
 }
 
 
@@ -109,5 +108,6 @@ module "vpc-peering-r2-r3" {
   tags = {
     Name = "${var.resource_prefix}-${var.aws_region_2}-${var.aws_region_3}-peering"
   }
+  depends_on = [module.r2, module.r3]
 }
 

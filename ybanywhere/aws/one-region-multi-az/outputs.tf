@@ -12,12 +12,6 @@ output "region_output" {
   }
 }
 
-output "replicated_password" {
-  sensitive = true
-  value     = module.r1.yugabyte_anywhere_region != "non_deployed" ? module.r1.replicated_password : " "
-}
-
 output "node_on_prem" {
   value = module.r1.node_on_prem
-
 }
