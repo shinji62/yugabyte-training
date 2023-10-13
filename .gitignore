@@ -6,6 +6,8 @@
 
 # Local .terraform directories
 **/.terraform/*
+locals/
+ybanywhere/aws/amoll-one-region-mutli-az/
 
 # .tfstate files
 *.tfstate
