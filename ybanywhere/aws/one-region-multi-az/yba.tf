@@ -100,7 +100,7 @@ resource "yba_universe" "awsrf3" {
       provider_type      = yba_cloud_provider.aws.code
       provider           = yba_cloud_provider.aws.id
       region_list        = yba_cloud_provider.aws.regions[*].uuid
-      num_nodes          = 4
+      num_nodes          = 3
       replication_factor = 3
       instance_type      = "c4.large"
       device_info {
@@ -121,13 +121,13 @@ resource "yba_universe" "awsrf3" {
 }
 
 
-# resource "yba_storage_config_resource" "storage_config" {
-#   provider                 = yba.authenticated
-#   name                     = "S3"
-#   backup_location          = "s3://my-backup-storage"
-#   config_name              = "aws-backup"
-#   use_iam_instance_profile = true
-# }
+resource "yba_storage_config_resource" "storage_config" {
+  provider                 = yba.authenticated
+  name                     = "S3"
+  backup_location          = "s3://${module.r1.backup_bucket}"
+  config_name              = "aws-backup"
+  use_iam_instance_profile = true
+}
 
 # resource "yba_backups" "universe_backup_schedule_detailed" {
 #   provider            = yba.authenticated

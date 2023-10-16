@@ -51,3 +51,8 @@ output "private_subnets" {
   value       = module.vpc.private_subnets
   description = "private subnet"
 }
+
+output "backup_bucket" {
+  value       = one(aws_s3_bucket.backup_bucket[*].bucket)
+  description = "Bucket for Backup"
+}

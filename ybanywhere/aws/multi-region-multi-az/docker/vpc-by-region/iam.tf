@@ -130,3 +130,36 @@ resource "aws_iam_role_policy_attachment" "yb-node-ssm-attach" {
   role       = one(aws_iam_role.yb_node_role[*].name)
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
+
+
+data "aws_iam_policy_document" "backup_policy" {
+  count = var.create_yba_instances ? 1 : 0
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:DeleteObject",
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:GetBucketLocation"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${one(aws_s3_bucket.backup_bucket[*].id)}",
+      "arn:aws:s3:::${one(aws_s3_bucket.backup_bucket[*].id)}/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "yb_any_backup_s3_policy" {
+  count  = var.create_yba_instances ? 1 : 0
+  name   = "${local.name_prefix}-ybw-inst-s3-policy"
+  policy = one(data.aws_iam_policy_document.backup_policy[*].json)
+}
+
+resource "aws_iam_role_policy_attachment" "yb-anywhere-s3-attach" {
+  count      = var.create_yba_instances ? 1 : 0
+  role       = one(aws_iam_role.yb_anywhere_role[*].name)
+  policy_arn = one(aws_iam_policy.yb_any_backup_s3_policy[*].arn)
+}
