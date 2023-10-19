@@ -23,12 +23,6 @@ output "yba_project_name" {
 
 }
 
-output "replicated_password" {
-  description = "Replicated password to get it please use terraform ouput command "
-  value       = local.replicated_password
-  sensitive   = true
-}
-
 output "node_on_prem" {
   description = "Node for on prem cloud provider testing"
   value = { for v in google_compute_instance.yugabyte_node_instances :
@@ -37,4 +31,10 @@ output "node_on_prem" {
       "public_ip" = flatten(flatten(v.network_interface[*].access_config[*].nat_ip))
     }
   }
+}
+
+
+output "backup_bucket" {
+  description = "Backup bucket"
+  value       = google_storage_bucket.backup_bucket.name
 }

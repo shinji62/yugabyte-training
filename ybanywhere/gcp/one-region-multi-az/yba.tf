@@ -1,17 +1,17 @@
 # # Setup YBA using Installer
 resource "yba_installer" "install" {
   provider                  = yba.unauthenticated
-  ssh_host_ip               = module.r1.yugabyte_anywhere_ip
+  ssh_host_ip               = local.yba_public_ip
   ssh_user                  = var.yba_ssh_user
   ssh_private_key_file_path = var.yba_ssh_private_key_path
   yba_license_file          = var.yba_license_file_path
   yba_version               = var.yba_version_number
-  depends_on                = [module.r1]
+  depends_on                = [google_compute_instance.yugabyte_anywhere_instances]
 }
 
 
 
-### Config YBA
+# ### Config YBA
 resource "yba_customer_resource" "customer" {
   // use unauthenticated provider to create customer
   provider = yba.unauthenticated
@@ -26,7 +26,7 @@ resource "yba_customer_resource" "customer" {
 
 resource "checkmate_http_health" "example" {
   # This is the url of the endpoint we want to check
-  url = "https://${module.r1.yugabyte_anywhere_ip}/api/v1/app_version"
+  url = "https://${local.yba_public_ip}/api/v1/app_version"
 
   # Will perform an HTTP GET request
   method = "GET"
@@ -48,38 +48,33 @@ resource "checkmate_http_health" "example" {
 }
 
 
-resource "yba_cloud_provider" "aws" {
-  code     = "aws"
+resource "yba_cloud_provider" "gcp" {
+  code     = "gcp"
   provider = yba.authenticated
-  name     = "awsProvider"
+  name     = "gcpProvider"
   regions {
-    code              = var.aws_region
-    name              = var.aws_region
-    security_group_id = module.r1.yugabyte_anywhere_node_security_group_id
-    vnet_name         = module.r1.vpc_id
-    dynamic "zones" {
-      for_each = module.r1.azs
-      content {
-        code   = zones.value
-        name   = zones.value
-        subnet = module.r1.private_subnets[zones.key]
-      }
-
+    code = var.gcp_region
+    name = var.gcp_region
+    zones {
+      subnet = module.gcp-vpc.subnets_names[0]
     }
   }
-  aws_config_settings {
-    use_iam_instance_profile = true
+  gcp_config_settings {
+    use_host_vpc         = true
+    project_id           = var.project_id
+    use_host_credentials = true
+    yb_firewall_tags     = "yb-db-node"
   }
+  depends_on = [module.gcp-vpc, yba_customer_resource.customer]
 
-  ssh_port        = 22
-  air_gap_install = false
-  depends_on      = [yba_customer_resource.customer]
 }
 
 
-// Provider key version
-data "yba_provider_key" "aws_key" {
-  provider_id = yba_cloud_provider.aws.id
+
+
+# // Provider key version
+data "yba_provider_key" "gcp_key" {
+  provider_id = yba_cloud_provider.gcp.id
   provider    = yba.authenticated
 }
 
@@ -90,7 +85,7 @@ data "yba_release_version" "release_version" {
 }
 
 
-resource "yba_universe" "awsrf3" {
+resource "yba_universe" "gcprf3" {
   provider = yba.authenticated
   clusters {
     cluster_type = "PRIMARY"
@@ -101,24 +96,22 @@ resource "yba_universe" "awsrf3" {
       # master_gflags = {
       #   yb_enable_read_committed_isolation = true
       # }
-      universe_name      = "aws-rf3-test"
-      provider_type      = yba_cloud_provider.aws.code
-      provider           = yba_cloud_provider.aws.id
-      region_list        = yba_cloud_provider.aws.regions[*].uuid
+      universe_name      = "gcp-rf3-test"
+      provider_type      = yba_cloud_provider.gcp.code
+      provider           = yba_cloud_provider.gcp.id
+      region_list        = yba_cloud_provider.gcp.regions[*].uuid
       num_nodes          = 3
       replication_factor = 3
-      instance_type      = "c4.large"
+      instance_type      = "n1-standard-1"
       device_info {
         num_volumes  = 1
         volume_size  = 375
-        storage_type = "GP3"
-        disk_iops    = "3000"
-        throughput   = "125"
+        storage_type = "Persistent"
       }
       use_time_sync       = true
       enable_ysql         = true
       yb_software_version = data.yba_release_version.release_version.id
-      access_key_code     = data.yba_provider_key.aws_key.id
+      access_key_code     = data.yba_provider_key.gcp_key.id
     }
   }
   communication_ports {}
@@ -126,13 +119,12 @@ resource "yba_universe" "awsrf3" {
 }
 
 
-resource "yba_storage_config_resource" "storage_config" {
-  provider                 = yba.authenticated
-  name                     = "S3"
-  backup_location          = "s3://${module.r1.backup_bucket}"
-  config_name              = "aws-backup"
-  use_iam_instance_profile = true
-}
+# resource "yba_storage_config_resource" "storage_config" {
+#   provider                 = yba.authenticated
+#   name                     = "GCS"
+#   backup_location          = "gcs://${google_storage_bucket.backup_bucket.name}"
+#   config_name              = "gcp-backup"
+# }
 
 # # resource "yba_backups" "universe_backup_schedule_detailed" {
 # #   provider            = yba.authenticated

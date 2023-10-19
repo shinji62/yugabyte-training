@@ -105,8 +105,5 @@ resource "google_compute_instance" "yugabyte_node_instances" {
 
   network_interface {
     subnetwork = module.gcp-vpc.subnets_names[(length(var.gcp_regions) == 3 ? count.index : 0)]
-    access_config {
-      // Ephemeral IP
-    }
   }
 }

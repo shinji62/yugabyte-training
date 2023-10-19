@@ -33,21 +33,8 @@ terraform apply on-region.tfplan
 # YBA anywhere 
 You can now access to YBA by using the `yba_public_ip` output by your terraform.
 
-Please use the Terraform output to configure the GCP Cloud provider, please use "Service account of the instance" you don't need any additional service account.
-
-# Replicated password
-To output the password of replicated please use the following command
-
-```
-shell
-terraform output -json replicated_password
-```
 
 # Cleaning
-Please delete from YBA interface
-1. Universes
-2. Cloud Provider Config
-
 ```shell
 terraform destroy -var-file=yourvars-file.tfvars 
 ```

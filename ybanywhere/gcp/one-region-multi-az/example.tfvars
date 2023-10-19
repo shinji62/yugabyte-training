@@ -1,13 +1,11 @@
-aws_region_1 = "ap-northeast-1"
-aws_region_2 = "ap-southeast-1"
-aws_region_3 = "ap-southeast-2"
-
+gcp_region    = "asia-northeast1"
+project_id    = "yourgcp_project"
+instance_type = "n1-standard-4"
 default_tags = {
-  yb_tags1  = "poc"
-  yb_tags2  = "poc2"
+  tag_1  = "value1"
+  tag_2  = "value2"
+
 }
-resource_prefix  = "yb-ge"
-ssh_keypair_name = "my-key-pair-in-aws"
 resource_prefix                    = "myprefix"
 allowed_sources                    = ["mylocalip/32"]
 yba_ssh_private_key_path           = "path/to/privatekey/for/ssh/file"

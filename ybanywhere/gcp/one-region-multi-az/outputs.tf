@@ -20,12 +20,10 @@ output "yba_public_ip" {
 output "yba_project_name" {
   description = "GCP Project ID"
   value       = var.project_id
-
 }
 
-output "replicated_password" {
-  description = "Replicated password to get it please use terraform ouput command "
-  value       = local.replicated_password
-  sensitive   = true
+output "google_backup_creds" {
+sensitive = true  
+description = "google credentials for the backup"
+value = google_service_account_key.google_key.private_key
 }
-
