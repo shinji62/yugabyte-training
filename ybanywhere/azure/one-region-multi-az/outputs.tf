@@ -33,12 +33,6 @@ output "yugabyte_anywhere_public_ip" {
   description = "Public IP of your Yugabyte anywhere"
 }
 
-output "replicated_password" {
-  description = "Replicated password to get it please use terraform ouput command "
-  value       = local.replicated_password
-  sensitive   = true
-}
-
 output "security_group_name" {
   value       = azurerm_network_security_group.yba_sg.name
   description = "Name of the security group"

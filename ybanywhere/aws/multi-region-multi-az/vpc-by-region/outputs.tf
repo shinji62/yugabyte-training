@@ -56,3 +56,12 @@ output "backup_bucket" {
   value       = one(aws_s3_bucket.backup_bucket[*].bucket)
   description = "Bucket for Backup"
 }
+
+
+output "public_route_table_ids" {
+  value = module.vpc.public_route_table_ids
+}
+
+output "private_route_table_ids" {
+  value = module.vpc.private_route_table_ids
+}

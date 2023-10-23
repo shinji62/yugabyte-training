@@ -2,7 +2,7 @@
 // 3 Private/Public subnet and one NAT gw by AZ
 
 module "r1" {
-  source              = "../multi-region-multi-az/docker/vpc-by-region"
+  source              = "../multi-region-multi-az/vpc-by-region"
   aws_region          = var.aws_region
   default_tags        = var.default_tags
   resource_prefix     = var.resource_prefix

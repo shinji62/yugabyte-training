@@ -12,20 +12,11 @@ resource "azurerm_linux_virtual_machine" "yba_inst" {
 
 
   # This is where we pass our cloud-init.
-  user_data = base64encode(templatefile(
-    "${path.module}/scripts/cloud-init.yml.tpl",
-    {
-      replicated_conf      = base64encode(file("${path.module}/files/replicated.conf"))
-      license_download     = "${one(azurerm_storage_blob.license[*].url)}.${one(data.azurerm_storage_account_blob_container_sas.yba_license_bucket_sas[*].sas)}"
-      application_settings = base64encode(file("${path.module}/files/application_settings.conf"))
-      replicated_password  = local.replicated_password
-    }
-    )
-  )
+  user_data =filebase64("${path.module}/scripts/cloud-init.yml")
 
   admin_ssh_key {
     username   = "ubuntu"
-    public_key = file(var.public_key_path)
+    public_key = file(var.yba_ssh_public_key_path)
   }
 
   network_interface_ids = [

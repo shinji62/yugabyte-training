@@ -4,6 +4,15 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "3.32.0"
     }
+    yba = {
+      source = "yugabyte/yba"
+      #version = "0.1.8"
+      version = "0.1.0-dev"
+    }
+    checkmate = {
+      source  = "tetratelabs/checkmate"
+      version = "1.5.0"
+    }
   }
 }
 
