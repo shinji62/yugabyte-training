@@ -5,7 +5,6 @@ This deployment will create a VPC in one region and install YB anywhere to one o
 # YB Anywhere
 
 * Deployed using Terraform and YBA provider
-* Need https://github.com/yugabyte/terraform-provider-yba/pull/185 to be merged
 
 # Limitation
 

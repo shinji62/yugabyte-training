@@ -48,5 +48,5 @@ resource "google_compute_instance" "yugabyte_anywhere_instances" {
       // Ephemeral IP
     }
   }
-  depends_on = [ google_compute_firewall.yb_anywhere_db_node,google_compute_firewall.yb_anywhere_inst,google_project_iam_member.project ]
+  depends_on = [google_compute_firewall.yb_anywhere_db_node, google_compute_firewall.yb_anywhere_inst, google_project_iam_member.project]
 }

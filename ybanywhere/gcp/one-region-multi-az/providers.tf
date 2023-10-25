@@ -5,9 +5,8 @@ terraform {
       version = "4.43.1"
     }
     yba = {
-      source = "yugabyte/yba"
-      #version = "0.1.8"
-      version = "0.1.0-dev"
+      source  = "yugabyte/yba"
+      version = "0.1.9"
     }
     checkmate = {
       source  = "tetratelabs/checkmate"
