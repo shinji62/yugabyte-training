@@ -1,14 +1,22 @@
 # Description
 
-This deployment will create a multi-region VPC and install YB anywhere to one of them.
+This Terraform code will:
 
+* Provision an GCP multi-region multi-zone deployment
+* Install YB anywhere to one of them.
+* Create a bucket and setup as storage config in YBA
+* Will set up a 3 nodes Universe across the 3 regions
+
+# GCP
+* This is using a single GCP account 
 
 # YB Anywhere
 
-* Deployed using Replicated (docker)
-* Only HTTP is supported 
-
-
+* Deployed using terraform YBA provider
+* Deploy into one of the public subnet
+* Use HTTPS with generated certificate 
+  
+  
 # Run
 Make sure you are connected to your GCP account (sso, access key, ...)
 

@@ -33,12 +33,7 @@ resource "google_compute_instance" "yugabyte_anywhere_instances" {
     user-data = templatefile(
       "${path.module}/scripts/cloud-init.yml.tpl",
       {
-        replicated_conf       = base64encode(file("${path.module}/files/replicated.conf"))
-        license_bucket        = google_storage_bucket.license_bucket.name
-        application_settings  = base64encode(file("${path.module}/files/application_settings.conf"))
-        public_key            = file(var.public_key_path)
-        replicated_password   = local.replicated_password
-        replicated_seq_number = var.replicated_seq_number
+        public_key = file(var.yba_ssh_public_key_path)
       }
     )
   }
@@ -52,6 +47,7 @@ resource "google_compute_instance" "yugabyte_anywhere_instances" {
       // Ephemeral IP
     }
   }
+  depends_on = [google_compute_firewall.yb_anywhere_db_node, google_compute_firewall.yb_anywhere_inst, google_project_iam_member.project]
 }
 
 
@@ -102,7 +98,7 @@ resource "google_compute_instance" "yugabyte_node_instances" {
       }
     )
   }
-
+  depends_on = [google_compute_firewall.yb_anywhere_db_node, google_compute_firewall.yb_anywhere_inst, google_project_iam_member.project]
   network_interface {
     subnetwork = module.gcp-vpc.subnets_names[(length(var.gcp_regions) == 3 ? count.index : 0)]
   }

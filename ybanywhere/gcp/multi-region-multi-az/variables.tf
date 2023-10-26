@@ -31,9 +31,9 @@ variable "instance_type" {
 }
 
 variable "volume_size" {
-  description = "Volume size for YugabyteDB Anywhere node (default: 100)"
+  description = "Volume size for YugabyteDB Anywhere node (default: 250)"
   type        = string
-  default     = "100"
+  default     = "250"
 }
 
 variable "allowed_sources" {
@@ -82,4 +82,65 @@ variable "node_on_prem_public_key_path" {
   description = "Local path to you public key to connect to YB Node instance (Default: same as public_key_path)"
   type        = string
   default     = null
+}
+
+variable "yb_port" {
+  type        = list(number)
+  description = "YB ports"
+  default     = [22, 5433, 7000, 7100, 9000, 9100, 9070, 9300, 9042, 11000, 14000, 18018, 13000, 12000]
+}
+
+variable "yba_application_settings_file_path" {
+  description = "Path the YBA installer application settings file"
+  type        = string
+}
+
+variable "yba_customer_code" {
+  description = "Label for the user. (default: admin)."
+  type        = string
+  default     = "admin"
+
+}
+
+variable "yba_customer_email" {
+  description = "Email for the user, which is used for login on the YugabyteDB Anywhere portal."
+  type        = string
+}
+
+variable "yba_customer_name" {
+  description = "Name of the user. (default: admin)"
+  type        = string
+
+}
+
+variable "yba_license_file_path" {
+  description = "Path to the YBA license file"
+  type        = string
+}
+
+variable "yba_port" {
+  type        = list(number)
+  description = "YBA default ports"
+  default     = [22, 80, 8800, 9090, 443, 54422]
+}
+
+variable "yba_ssh_private_key_path" {
+  description = "Path to the private key for the SSH users"
+  type        = string
+}
+
+variable "yba_ssh_public_key_path" {
+  description = "Path to the public key for the SSH users"
+  type        = string
+}
+
+variable "yba_ssh_user" {
+  description = "Yugabyte Anywhere SSH Users use to provision the instance"
+  type        = string
+}
+
+variable "yba_version_number" {
+  description = "YBA version number including build number. (default: 2.18.4.0-b52)"
+  type        = string
+  default     = "2.18.4.0-b52"
 }
