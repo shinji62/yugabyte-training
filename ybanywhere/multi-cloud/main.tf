@@ -4,13 +4,11 @@ module "aws-vpc-vpn-gw" {
   aws_region                   = var.aws_region
   create_yba_instances         = var.aws_create_yba_instances
   default_tags                 = var.default_tags
-  license_path                 = var.license_path
   node_on_prem_public_key_path = var.node_on_prem_public_key_path
   node_on_prem_test            = var.aws_node_on_prem_test
-  replicated_password          = var.replicated_password
-  replicated_seq_number        = var.replicated_seq_number
   resource_prefix              = var.resource_prefix
-  ssh_keypair_name             = var.aws_ssh_keypair_name
+  aws_ssh_keypair_name         = var.aws_ssh_keypair_name
+  yba_ssh_public_key_path      = var.yba_ssh_public_key_path
 }
 
 module "gcp-vpc-vpn-gw" {
@@ -18,7 +16,6 @@ module "gcp-vpc-vpn-gw" {
   allowed_sources              = var.allowed_sources
   default_tags                 = var.default_tags
   gcp_region                   = var.gcp_region
-  license_path                 = var.license_path
   node_on_prem_public_key_path = var.node_on_prem_public_key_path
   node_on_prem_test            = var.gcp_node_on_prem_test
   project_id                   = var.project_id
@@ -30,14 +27,10 @@ module "azure-vpc-vpn-gw" {
   source                       = "./azure"
   allowed_sources              = var.allowed_sources
   azure_location               = var.azure_location
-  create_yba_instances         = var.azure_create_yba_instances
   default_tags                 = var.default_tags
-  license_path                 = var.license_path
   node_on_prem_public_key_path = var.node_on_prem_public_key_path
   node_on_prem_test            = var.azure_node_on_prem_test
   public_key_path              = var.node_on_prem_public_key_path
-  replicated_password          = var.replicated_password
-  replicated_seq_number        = var.replicated_seq_number
   resource_group               = var.azure_resource_group
   resource_prefix              = var.resource_prefix
   subscription_id              = var.subscription_id

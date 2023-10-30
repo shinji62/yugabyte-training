@@ -21,3 +21,7 @@ output "aws_region_output" {
 output "aws_node_on_prem" {
   value = module.aws-one-region.node_on_prem
 }
+
+output "yba_anywhere_ip" {
+  value = module.aws-one-region.yugabyte_anywhere_ip
+}

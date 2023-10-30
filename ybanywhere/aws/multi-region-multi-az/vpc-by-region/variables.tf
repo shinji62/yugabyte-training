@@ -32,12 +32,6 @@ variable "instance_type" {
   default     = "c5.2xlarge"
 }
 
-variable "license_path" {
-  description = "Local path to the license ril file"
-  type        = string
-  nullable    = true
-}
-
 variable "node_on_prem_public_key_path" {
   description = "Local path to you public key to connect to YB Node instance (Default: empty)"
   type        = string

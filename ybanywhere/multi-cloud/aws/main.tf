@@ -1,5 +1,5 @@
 module "aws-one-region" {
-  source              = "../../aws/multi-region-multi-az/docker/vpc-by-region"
+  source              = "../../aws/multi-region-multi-az/vpc-by-region"
   aws_region          = var.aws_region
   default_tags        = var.default_tags
   resource_prefix     = var.resource_prefix
@@ -9,13 +9,11 @@ module "aws-one-region" {
   allowed_sources     = concat(["10.0.0.0/8"], var.allowed_sources)
 
   create_yba_instances               = var.create_yba_instances
-  ssh_keypair_name                   = var.ssh_keypair_name
-  license_path                       = var.license_path
-  replicated_password                = var.replicated_password
-  replicated_seq_number              = var.replicated_seq_number
+  ssh_keypair_name                   = var.aws_ssh_keypair_name
   node_on_prem_test                  = var.node_on_prem_test
   enable_vpn_gateway                 = true
   propagate_private_route_tables_vgw = true
   propagate_public_route_tables_vgw  = true
   node_on_prem_public_key_path       = var.node_on_prem_public_key_path
+  yba_public_key_path                = var.yba_ssh_public_key_path
 }

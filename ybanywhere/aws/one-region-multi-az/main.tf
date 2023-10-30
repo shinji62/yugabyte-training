@@ -13,7 +13,6 @@ module "r1" {
 
   create_yba_instances         = true
   ssh_keypair_name             = var.ssh_keypair_name
-  license_path                 = var.license_path
   node_on_prem_test            = var.node_on_prem_test
   node_on_prem_public_key_path = var.node_on_prem_public_key_path
   private_subnets_tag          = var.private_subnets_tag

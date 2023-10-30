@@ -25,15 +25,6 @@ resource "azurerm_subnet" "yba_sub_gateway" {
   address_prefixes     = ["10.3.2.0/24"]
 }
 
-// Public IP
-resource "azurerm_public_ip" "yba_public_ip" {
-  name                = "${local.name_prefix}-public-ip"
-  location            = local.location
-  resource_group_name = local.resource_group
-  allocation_method   = "Dynamic"
-  tags                = var.default_tags
-}
-
 resource "azurerm_network_security_group" "yba_sg" {
   name                = "${local.name_prefix}-sg"
   location            = local.location
@@ -68,29 +59,6 @@ resource "azurerm_network_security_rule" "icmp_rule" {
   network_security_group_name = azurerm_network_security_group.yba_sg.name
   resource_group_name         = local.resource_group
 
-}
-
-
-resource "azurerm_network_interface" "yba_inst_nic" {
-  count = var.create_yba_instances ? 1 : 0
-
-  name                = "${local.name_prefix}-yba-nic"
-  location            = local.location
-  resource_group_name = local.resource_group
-
-  ip_configuration {
-    name                          = "${local.name_prefix}-yba-nic-config"
-    subnet_id                     = azurerm_subnet.yba_sub_internal.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = one(azurerm_public_ip.yba_public_ip[*].id)
-  }
-}
-
-resource "azurerm_network_interface_security_group_association" "yba_nic_assoc" {
-  count = var.create_yba_instances ? 1 : 0
-
-  network_interface_id      = one(azurerm_network_interface.yba_inst_nic[*].id)
-  network_security_group_id = azurerm_network_security_group.yba_sg.id
 }
 
 

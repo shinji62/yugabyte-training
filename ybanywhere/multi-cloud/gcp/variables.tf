@@ -42,11 +42,6 @@ variable "create_yba_instances" {
   description = "When true, will deploy the yba anywhere on this VPC with public IP."
 }
 
-variable "license_path" {
-  description = "Local path to the license ril file"
-  type        = string
-}
-
 variable "public_key_path" {
   description = "Local path to you public key to connect to YBA instance"
   type        = string
@@ -76,15 +71,14 @@ variable "node_on_prem_disk_size" {
 
 }
 
-
-variable "replicated_password" {
-  description = "Password for replicated daemon, if not specified will be generated."
-  type        = string
-  default     = null
+variable "yb_port" {
+  type        = list(number)
+  description = "YB ports"
+  default     = [22, 5433, 7000, 7100, 9000, 9100, 9070, 9300, 9042, 11000, 14000, 18018, 13000, 12000]
 }
 
-variable "replicated_seq_number" {
-  description = "Specific replicated version to pin to."
-  type        = number
-  default     = null
+variable "yba_port" {
+  type        = list(number)
+  description = "YBA default ports"
+  default     = [22, 80, 8800, 9090, 443, 54422]
 }

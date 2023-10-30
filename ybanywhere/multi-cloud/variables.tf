@@ -80,10 +80,10 @@ variable "instance_type" {
   default     = "c5.xlarge"
 }
 
-variable "license_path" {
-  description = "Local path to the license ril file"
+variable "node_on_prem_private_key_path" {
+  description = "Local path to you private key to connect to YB Node instance (Default: empty)"
   type        = string
-  nullable    = true
+  default     = null
 }
 
 variable "node_on_prem_public_key_path" {
@@ -95,18 +95,6 @@ variable "node_on_prem_public_key_path" {
 variable "project_id" {
   type        = string
   description = "GCP project id"
-}
-
-variable "replicated_password" {
-  description = "Password for replicated daemon, if not specified will be generated."
-  type        = string
-  default     = null
-}
-
-variable "replicated_seq_number" {
-  description = "Specific replicated version to pin to."
-  type        = number
-  default     = null
 }
 
 variable "resource_prefix" {
@@ -128,4 +116,65 @@ variable "volume_size" {
   description = "Volume size for YugabyteDB Anywhere node (default: 100)"
   type        = string
   default     = "100"
+}
+
+variable "yb_port" {
+  type        = list(number)
+  description = "YB ports"
+  default     = [22, 5433, 7000, 7100, 9000, 9100, 9070, 9300, 9042, 11000, 14000, 18018, 13000, 12000]
+}
+
+variable "yba_application_settings_file_path" {
+  description = "Path the YBA installer application settings file"
+  type        = string
+}
+
+variable "yba_customer_code" {
+  description = "Label for the user. (default: admin)."
+  type        = string
+  default     = "admin"
+
+}
+
+variable "yba_customer_email" {
+  description = "Email for the user, which is used for login on the YugabyteDB Anywhere portal."
+  type        = string
+}
+
+variable "yba_customer_name" {
+  description = "Name of the user. (default: admin)"
+  type        = string
+
+}
+
+variable "yba_license_file_path" {
+  description = "Path to the YBA license file"
+  type        = string
+}
+
+variable "yba_port" {
+  type        = list(number)
+  description = "YBA default ports"
+  default     = [22, 80, 8800, 9090, 443, 54422]
+}
+
+variable "yba_ssh_private_key_path" {
+  description = "Path to the private key for the SSH users"
+  type        = string
+}
+
+variable "yba_ssh_public_key_path" {
+  description = "Path to the public key for the SSH users"
+  type        = string
+}
+
+variable "yba_ssh_user" {
+  description = "Yugabyte Anywhere SSH Users use to provision the instance"
+  type        = string
+}
+
+variable "yba_version_number" {
+  description = "YBA version number including build number. (default: 2.18.3.0-b75)"
+  type        = string
+  default     = "2.18.3.0-b75"
 }

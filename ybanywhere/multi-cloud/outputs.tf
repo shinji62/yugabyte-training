@@ -13,7 +13,6 @@ output "AWS" {
 
 output "AZURE" {
   value = {
-    "azure_yba"          = module.azure-vpc-vpn-gw.azure_yba
     "azure_on_prem_node" = module.azure-vpc-vpn-gw.node_on_prem
   }
 }

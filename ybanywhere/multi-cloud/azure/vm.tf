@@ -1,63 +1,8 @@
-
-
-
-resource "azurerm_linux_virtual_machine" "yba_inst" {
-  count               = var.create_yba_instances ? 1 : 0
-  name                = "${local.name_prefix}-yba-inst"
-  location            = local.location
-  resource_group_name = local.resource_group
-  size                = var.instance_type
-  admin_username      = "ubuntu"
-
-
-
-  # This is where we pass our cloud-init.
-  user_data = base64encode(templatefile(
-    "${path.module}/scripts/cloud-init.yml.tpl",
-    {
-      replicated_conf      = base64encode(file("${path.module}/files/replicated.conf"))
-      license_download     = "${one(azurerm_storage_blob.license[*].url)}.${one(data.azurerm_storage_account_blob_container_sas.yba_license_bucket_sas[*].sas)}"
-      application_settings = base64encode(file("${path.module}/files/application_settings.conf"))
-      replicated_password  = local.replicated_password
-    }
-    )
-  )
-
-  admin_ssh_key {
-    username   = "ubuntu"
-    public_key = file(var.public_key_path)
-  }
-
-  network_interface_ids = [
-    one(azurerm_network_interface.yba_inst_nic[*].id)
-  ]
-
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "StandardSSD_LRS"
-    disk_size_gb         = var.volume_size
-  }
-
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-focal"
-    sku       = "20_04-lts-gen2"
-    version   = "20.04.202211151"
-  }
-  tags = var.default_tags
-
-  lifecycle {
-    ignore_changes = [user_data]
-  }
-}
-
-
 /*
 
 Azure Node for On Prem Cloud provider
 
 */
-
 
 
 resource "azurerm_linux_virtual_machine" "yb_anywhere_node_on_prem" {

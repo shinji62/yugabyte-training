@@ -13,7 +13,6 @@ module "r1" {
 
   create_yba_instances         = true
   ssh_keypair_name             = var.ssh_keypair_name
-  license_path                 = var.license_path
   node_on_prem_test            = var.node_on_prem_test
   node_on_prem_public_key_path = var.node_on_prem_public_key_path
   yba_public_key_path          = var.node_on_prem_public_key_path
@@ -29,7 +28,6 @@ module "r2" {
   public_subnet_cidr           = ["10.2.3.0/24", "10.2.4.0/24", "10.2.5.0/24"]
   allowed_sources              = concat(["10.0.0.0/8"], var.allowed_sources)
   ssh_keypair_name             = null
-  license_path                 = null
   node_on_prem_public_key_path = var.node_on_prem_public_key_path
 }
 
@@ -43,7 +41,6 @@ module "r3" {
   public_subnet_cidr           = ["10.3.3.0/24", "10.3.4.0/24", "10.3.5.0/24"]
   allowed_sources              = concat(["10.0.0.0/8"], var.allowed_sources)
   ssh_keypair_name             = null
-  license_path                 = null
   node_on_prem_public_key_path = var.node_on_prem_public_key_path
 }
 
