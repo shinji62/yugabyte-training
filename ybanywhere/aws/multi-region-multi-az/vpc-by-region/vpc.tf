@@ -116,11 +116,11 @@ module "vpc_endpoints" {
       subnet_ids          = module.vpc.private_subnets
       security_group_ids  = [aws_security_group.vpc_tls.id]
     },
-    codedeploy = {
-      service             = "codedeploy"
-      private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
-    },
+    # codedeploy = {
+    #   service             = "codedeploy"
+    #   private_dns_enabled = true
+    #   subnet_ids          = module.vpc.private_subnets
+    # },
     codedeploy_commands_secure = {
       service             = "codedeploy-commands-secure"
       private_dns_enabled = true

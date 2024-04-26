@@ -11,6 +11,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 }
 
 data "aws_iam_policy_document" "yb_anywhere_policy_doc" {
+  count = var.create_yba_instances ? 1 : var.create_yba_policy ? 1 : 0
   statement {
     actions = [
       "ec2:AttachVolume",
@@ -66,7 +67,8 @@ data "aws_iam_policy_document" "yb_anywhere_policy_doc" {
       "ec2:GetConsoleOutput",
       "ec2:CreateSnapshot",
       "ec2:DeleteSnapshot",
-      "ec2:DescribeInstanceTypes"
+      "ec2:DescribeInstanceTypes",
+      "iam:GetRole"
     ]
 
     #tfsec:ignore:aws-iam-no-policy-wildcards
@@ -75,9 +77,9 @@ data "aws_iam_policy_document" "yb_anywhere_policy_doc" {
 }
 
 resource "aws_iam_policy" "yb_anywhere_policy" {
-  count  = var.create_yba_instances ? 1 : 0
+  count  = var.create_yba_instances ? 1 : var.create_yba_policy ? 1 : 0
   name   = "${local.name_prefix}-ybw-inst-policy"
-  policy = data.aws_iam_policy_document.yb_anywhere_policy_doc.json
+  policy = one(data.aws_iam_policy_document.yb_anywhere_policy_doc[*].json)
 }
 
 # Yugabyte Anywhere instance Role
@@ -133,7 +135,7 @@ resource "aws_iam_role_policy_attachment" "yb-node-ssm-attach" {
 
 
 data "aws_iam_policy_document" "backup_policy" {
-  count = var.create_yba_instances ? 1 : 0
+  count = var.create_backup_bucket ? 1 : 0
   statement {
     effect = "Allow"
 
@@ -153,13 +155,46 @@ data "aws_iam_policy_document" "backup_policy" {
 }
 
 resource "aws_iam_policy" "yb_any_backup_s3_policy" {
-  count  = var.create_yba_instances ? 1 : 0
+  count  = var.create_backup_bucket ? 1 : 0
   name   = "${local.name_prefix}-ybw-inst-s3-policy"
   policy = one(data.aws_iam_policy_document.backup_policy[*].json)
 }
 
 resource "aws_iam_role_policy_attachment" "yb-anywhere-s3-attach" {
-  count      = var.create_yba_instances ? 1 : 0
+  count      = var.create_backup_bucket ? (var.create_yba_instances ? 1 : 0) : 0
   role       = one(aws_iam_role.yb_anywhere_role[*].name)
   policy_arn = one(aws_iam_policy.yb_any_backup_s3_policy[*].arn)
+}
+
+
+## KMS
+
+data "aws_iam_policy_document" "yb_anywhere_kms" {
+  count = var.create_kms_permission ? 1 : 0
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "kms:CreateKey",
+      "kms:ListAliases",
+      "kms:ListKeys",
+      "kms:CreateAlias",
+      "kms:DeleteAlias",
+      "kms:UpdateAlias",
+      "kms:TagResource"
+    ]
+
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "yb_any_kms_policy" {
+  count  = var.create_kms_permission ? 1 : 0
+  name   = "${local.name_prefix}-ybw-inst-kms-policy"
+  policy = one(data.aws_iam_policy_document.yb_anywhere_kms[*].json)
+}
+resource "aws_iam_role_policy_attachment" "yb-anywhere-kms-attach" {
+  count      = var.create_kms_permission ? (var.create_yba_instances ? 1 : 0) : 0
+  role       = one(aws_iam_role.yb_anywhere_role[*].name)
+  policy_arn = one(aws_iam_policy.yb_any_kms_policy[*].arn)
 }

@@ -1,4 +1,4 @@
-# # Setup YBA using Installer
+# # # Setup YBA using Installer
 resource "yba_installer" "install" {
   provider                  = yba.unauthenticated
   ssh_host_ip               = module.r1.yugabyte_anywhere_ip
@@ -11,7 +11,7 @@ resource "yba_installer" "install" {
 
 
 
-### Config YBA
+# ### Config YBA
 resource "yba_customer_resource" "customer" {
   // use unauthenticated provider to create customer
   provider = yba.unauthenticated
@@ -77,7 +77,7 @@ resource "yba_cloud_provider" "aws" {
 }
 
 
-// Provider key version
+# // Provider key version
 data "yba_provider_key" "aws_key" {
   provider_id = yba_cloud_provider.aws.id
   provider    = yba.authenticated
@@ -126,13 +126,13 @@ resource "yba_universe" "awsrf3" {
 }
 
 
-resource "yba_storage_config_resource" "storage_config" {
-  provider                 = yba.authenticated
-  name                     = "S3"
-  backup_location          = "s3://${module.r1.backup_bucket}"
-  config_name              = "aws-backup"
-  use_iam_instance_profile = true
-}
+# resource "yba_storage_config_resource" "storage_config" {
+#   provider                 = yba.authenticated
+#   name                     = "S3"
+#   backup_location          = "s3://${module.r1.backup_bucket}"
+#   config_name              = "aws-backup"
+#   use_iam_instance_profile = true
+# }
 
 # # resource "yba_backups" "universe_backup_schedule_detailed" {
 # #   provider            = yba.authenticated

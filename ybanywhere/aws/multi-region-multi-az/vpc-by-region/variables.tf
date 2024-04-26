@@ -15,6 +15,13 @@ variable "create_yba_instances" {
   description = "When true, will deploy the yba anywhere on this VPC with public IP."
 }
 
+variable "create_yba_policy" {
+  type        = bool
+  default     = false
+  description = "When true, will deploy the create YBA policy. If create_yba_instances is true then policy will be created as well."
+}
+
+
 variable "default_tags" {
   type        = map(any)
   description = "List of tags to be applied to every resources (Required)"
@@ -122,4 +129,16 @@ variable "yba_public_key_path" {
   description = "Path to your public key to connect to YBA instance (Default: empty)"
   type        = string
   default     = null
+}
+
+variable "create_backup_bucket" {
+  description = "Create or not a bucket for YB (Default: false) "
+  type        = bool
+  default     = false
+}
+
+variable "create_kms_permission" {
+  description = "Create or not a kms permission for YB (Default: false) "
+  type        = bool
+  default     = false
 }

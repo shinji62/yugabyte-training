@@ -50,3 +50,4 @@ terraform.rc
 
 #Others
 run_sysbench_local.sh
+locals/demo-multi-cluster-eeks/istio
